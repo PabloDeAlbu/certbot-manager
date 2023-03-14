@@ -27,12 +27,10 @@ get_domains_to_renew: build
 	@echo "Los dominios a actualizar se almacenaron correctamente en get_domains_to_renew.txt"
 
 certbot-dry-run: 
-	@certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > log.txt
+	@certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt
 
-certbot-dry-run-1: certbot-dry-run
-	@${PYTHON} check_log.py
-
-certbot-renew: certbot-dry-run-1
-	echo "Salio bien"
+certbot-renew: certbot-dry-run
+#	 @/usr/bin/certbot -q renew
+	echo "OK - certbot renew"
 
 #cat| grep -E 'Failed|Skipped' | awk '{print $NF}' > /path/to/failed-domains.txt
