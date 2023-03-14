@@ -22,6 +22,15 @@ build: requirements.txt
 	@touch $(FAILED_DOMAINS_FILE) $(DOMAINS_TO_RENEW_FILE)
 	@echo "OK - set up"
 
+check_certbot:
+	@echo "Checking if Certbot Apache plugin is installed..."
+	@if command -v certbot >/dev/null 2>&1 && certbot -h apache >/dev/null 2>&1; then \
+		echo "Certbot Apache plugin is installed."; \
+	else \
+		echo "Certbot Apache plugin is not installed. Please install the plugin and try again."; \
+		exit 1; \
+	fi
+
 get_domains_to_renew: build
 	@${PYTHON} get_domains_to_renew.py
 	@echo "Los dominios a actualizar se almacenaron correctamente en get_domains_to_renew.txt"
