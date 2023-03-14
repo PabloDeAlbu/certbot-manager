@@ -4,14 +4,16 @@ Certobot-Manager is a Python-based tool for renewing SSL/TLS certificates genera
 
 ## Requirements
 
-To use Certobot-Manager, you need to have the following installed on your system:
+Certobot-Manager is a tool to check if the domains listed in a certbot-generated SSL/TLS certificate meet the necessary requirements to renew the certificate. The tool uses the Apache plugin of Certbot for testing purposes.
+
+The tool consists of a Makefile that executes various Python scripts through different rules.
 
 * Python 3.6 or higher
-* Certbot
+* Apache with the Certbot plugin installed
+* Certbot-generated SSL/TLS certificate with multiple domains
 * GNU Make
-* OpenSSL
 
-You can install Python and Certbot using your operating system's package manager or by downloading them from their respective websites. Make and OpenSSL are typically pre-installed on most Unix-based systems.
+You can install Python and Certbot using your operating system's package manager or by downloading them from their respective websites. Make are typically pre-installed on most Unix-based systems.
 
 ## Getting Started
 
@@ -23,19 +25,6 @@ You can install Python and Certbot using your operating system's package manager
 
 `cd certobot-manager`
 
-3. Activate the virtual environment:
+3. Run the Makefile with the check rule:
 
-`source venv/bin/activate`
-
-4. Install the required Python packages:
-
-`pip install -r requirements.txt`
-
-5. Copy the sample configuration file and edit it to include your domains:
-
-`cp config.sample.ini config.ini
-nano config.ini`
-
-6. Run the makefile to renew the certificates:
-
-`make renew`
+`make check_certbot`
