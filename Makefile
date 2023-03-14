@@ -35,7 +35,7 @@ get_domains_to_renew: build
 	@${PYTHON} get_domains_to_renew.py
 	@echo "Los dominios a actualizar se almacenaron correctamente en get_domains_to_renew.txt"
 
-certbot-dry-run: 
+certbot-dry-run: check_certbot
 	@certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt
 
 certbot-renew: certbot-dry-run
