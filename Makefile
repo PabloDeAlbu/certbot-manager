@@ -1,26 +1,30 @@
-.ONESHELL:
-.PHONY: write_domains renew_certificates get_failed_domains
+.PHONY: prepare_venv cache build deploy renew_certificates
 
-# Incluir las variables definidas en el archivo .env
 include .env
 
-# Definir las rutas a los archivos de texto con los nombres de dominio
-FAILED_DOMAINS_FILE := $(WORKDIR)/failed-domains.txt
-DOMAINS_TO_RENEW_FILE := $(WORKDIR)/domains-to-renew.txt
+# define the paths to text files with domain names
+FAILED_DOMAINS_FILE := $(TMP_DIR)/failed-domains.txt
+DOMAINS_TO_RENEW_FILE := $(TMP_DIR)/domains-to-renew.txt
 CERT_FILE := $(CERT_FILE)
 
+# python vars 
 VENV_NAME?=.venv
 PYTHON=${VENV_NAME}/bin/python
 
-default: get_domains_to_renew
+default: set-up
 
-prepare_venv: $(VENV_NAME)/bin/activate
+set-up:
+	@mkdir -p $(TMP_DIR)
+	@touch $(FAILED_DOMAINS_FILE) $(DOMAINS_TO_RENEW_FILE)
+	@echo "OK - set up"
 
 $(VENV_NAME)/bin/activate: requirements.txt
 	test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
 	${PYTHON} -m pip install -U pip
 	${PYTHON} -m pip install -r requirements.txt
 	touch $(VENV_NAME)/bin/activate
+
+prepare_venv: $(VENV_NAME)/bin/activate
 
 get_domains_to_renew: prepare_venv
 	@${PYTHON} get_domains_to_renew.py
