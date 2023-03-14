@@ -13,15 +13,6 @@ PYTHON=${VENV_NAME}/bin/python
 
 default: build
 
-build: requirements.txt
-	@test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
-	@${PYTHON} -m pip install -U pip
-	@${PYTHON} -m pip install -r requirements.txt
-	@touch $(VENV_NAME)/bin/activate
-	@mkdir -p $(TMP_DIR)
-	@touch $(FAILED_DOMAINS_FILE) $(DOMAINS_TO_RENEW_FILE)
-	@echo "OK - set up"
-
 check_certbot:
 	@echo "Checking if Certbot Apache plugin is installed..."
 	@if command -v certbot >/dev/null 2>&1 && certbot -h apache >/dev/null 2>&1; then \
@@ -30,6 +21,15 @@ check_certbot:
 		echo "Certbot Apache plugin is not installed. Please install the plugin and try again."; \
 		exit 1; \
 	fi
+
+build: requirements.txt
+	@test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
+	@${PYTHON} -m pip install -U pip
+	@${PYTHON} -m pip install -r requirements.txt
+	@touch $(VENV_NAME)/bin/activate
+	@mkdir -p $(TMP_DIR)
+	@touch $(FAILED_DOMAINS_FILE) $(DOMAINS_TO_RENEW_FILE)
+	@echo "OK - set up"
 
 get_domains_to_renew: build
 	@${PYTHON} get_domains_to_renew.py
