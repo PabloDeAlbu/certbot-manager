@@ -4,7 +4,7 @@ def parse_certbot_output(file_path):
     with open(file_path, 'r') as f:
         output = f.read()
         
-    if 'Congratulations' in output:
+    if 'The dry run was successful' in output:
         print('Certbot execution successful')
     else:
         print('Certbot execution failed')
