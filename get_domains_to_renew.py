@@ -1,9 +1,10 @@
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+import os
 
 # Especifica la ruta al archivo PEM que contiene el certificado SSL
-cert_file = '/etc/letsencrypt/live/foros.todoscaminos.net/cert.pem'
-
+cert_file = os.getenv('CERT_FILE')
+tmp_dir = os.getenv('TMP_DIR')
 
 # Lee el contenido del archivo PEM
 with open(cert_file, 'rb') as f:
@@ -18,7 +19,7 @@ dns_names = cert.extensions.get_extension_for_class(x509.SubjectAlternativeName)
 domains = ','.join(dns_names)
 
 # Abre un archivo de texto en modo de escritura
-with open('domains-to-renew.txt', 'w') as f:
+with open(f'{tmp_dir}/domains-to-renew.txt', 'w') as f:
     # Escribe cada nombre de dominio en una línea separada en el archivo de texto
     f.write(domains)
 
