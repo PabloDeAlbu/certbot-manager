@@ -1,6 +1,9 @@
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 import os
+from dotenv import load_dotenv
+
+load_dotenv('.env')
 
 # Especifica la ruta al archivo PEM que contiene el certificado SSL
 cert_file = os.getenv('CERT_FILE')
