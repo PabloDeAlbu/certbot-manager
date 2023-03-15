@@ -31,14 +31,17 @@ build: requirements.txt
 	@touch $(FAILED_DOMAINS_FILE) $(DOMAINS_TO_RENEW_FILE)
 	@echo "OK - set up"
 
-get_domains_to_renew: build
+get_domains_to_renew: build 
 	@${PYTHON} get_domains_to_renew.py
 	@echo "Los dominios a actualizar se almacenaron correctamente en get_domains_to_renew.txt"
 
-certbot-dry-run: check_certbot
+certbot-dry-run: check_certbot get_domains_to_renew
 	@certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt
 
-certbot-renew: certbot-dry-run
+certbot-validate: certbot-dry-run
+	@${PYTHON} validate.py
+
+certbot-renew: certbot-validate
 #	 @/usr/bin/certbot -q renew
 	echo "OK - certbot renew"
 
