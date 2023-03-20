@@ -33,20 +33,18 @@ init-venv: requirements.txt
 build: init-venv check_certbot
 	@echo "OK - set up"
 
-get_domains_to_renew: 
+get_domains_to_renew:
 	@${PYTHON} get_domains_to_renew.py
 	@echo "Los dominios a actualizar se almacenaron correctamente en domains_to_renew.txt"
 
 handle_error:
+	@${PYTHON} validate.py
 	@echo "Certbot dry run failed"
 
-certbot-dry-run: get_domains_to_renew
+certbot-dry-run:
 	@set -e ; \
 	certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt || $(MAKE) handle_error
 
-certbot-validate: certbot-dry-run
-	@${PYTHON} validate.py
-
-certbot-renew: certbot-validate
+certbot-renew: certbot-dry-run
 #	 @/usr/bin/certbot -q renew
 	echo "OK - certbot renew"
