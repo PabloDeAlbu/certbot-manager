@@ -37,8 +37,12 @@ get_domains_to_renew:
 	@${PYTHON} get_domains_to_renew.py
 	@echo "Los dominios a actualizar se almacenaron correctamente en domains_to_renew.txt"
 
+handle_error:
+    @echo "Certbot dry run failed"
+
 certbot-dry-run: get_domains_to_renew
-	@certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt
+    @set -e ; \
+	certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt || $(MAKE) handle_error
 
 certbot-validate: certbot-dry-run
 	@${PYTHON} validate.py
