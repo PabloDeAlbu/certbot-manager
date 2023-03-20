@@ -39,12 +39,12 @@ get_domains_to_renew:
 
 handle_error:
 	@${PYTHON} validate.py
-	@echo "Certbot dry run failed"
+	@exit 1
 
-certbot-dry-run:
+certbot-dry-run: get_domains_to_renew
 	@set -e ; \
-	certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt || $(MAKE) handle_error
+	certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt || $(MAKE) -s handle_error
 
 certbot-renew: certbot-dry-run
-#	 @/usr/bin/certbot -q renew
+	@/usr/bin/certbot -q renew
 	echo "OK - certbot renew"
