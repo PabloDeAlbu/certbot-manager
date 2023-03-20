@@ -22,20 +22,22 @@ check_certbot:
 		exit 1; \
 	fi
 
-build: requirements.txt
+init-venv: requirements.txt
 	@test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
 	@${PYTHON} -m pip install -U pip
 	@${PYTHON} -m pip install -r requirements.txt
 	@touch $(VENV_NAME)/bin/activate
 	@mkdir -p $(TMP_DIR)
 	@touch $(FAILED_DOMAINS_FILE) $(DOMAINS_TO_RENEW_FILE)
+
+build: init-venv check_certbot
 	@echo "OK - set up"
 
-get_domains_to_renew: build 
+get_domains_to_renew: 
 	@${PYTHON} get_domains_to_renew.py
-	@echo "Los dominios a actualizar se almacenaron correctamente en get_domains_to_renew.txt"
+	@echo "Los dominios a actualizar se almacenaron correctamente en domains_to_renew.txt"
 
-certbot-dry-run: check_certbot get_domains_to_renew
+certbot-dry-run: get_domains_to_renew
 	@certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt
 
 certbot-validate: certbot-dry-run
@@ -44,5 +46,3 @@ certbot-validate: certbot-dry-run
 certbot-renew: certbot-validate
 #	 @/usr/bin/certbot -q renew
 	echo "OK - certbot renew"
-
-#cat| grep -E 'Failed|Skipped' | awk '{print $NF}' > /path/to/failed-domains.txt
