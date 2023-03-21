@@ -35,7 +35,6 @@ build: init-venv check_certbot
 
 get_domains_to_renew:
 	@${PYTHON} get_domains_to_renew.py
-	@echo "Los dominios a actualizar se almacenaron correctamente en domains_to_renew.txt"
 
 handle_error:
 	@${PYTHON} validate.py
