@@ -19,12 +19,28 @@ You can install Python and Certbot using your operating system's package manager
 
 1. Clone the repository:
 
-`git clone https://github.com/yourusername/certobot-manager.git`
+```
+git clone https://github.com/yourusername/certobot-manager.git
+cd certbot-manager
+```
 
-2. Create a virtual environment for the project:
 
-`cd certobot-manager`
+2. Create a virtual environment for the project and check certbot requirements:
 
-3. Run the Makefile with the check rule:
+```
+make build
+```
 
-`make check_certbot`
+3. Set the absolute path to the SSL/TLS certificate in .env. You can do this executing:
+
+```
+make cert_path path=/path/to/cert_file
+```
+
+
+4. Execute the renew rule:
+
+```
+make certbot-renew
+```
+
