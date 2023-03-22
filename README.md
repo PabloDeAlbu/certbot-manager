@@ -44,4 +44,6 @@ make cert_path path=/path/to/cert_file
 make certbot-renew
 ```
 
-In case of an error in the renewal of the certificate, an e-mail informing the error will be written in the tmp folder. If the problem is due to a domain that could not be renewed, it will be reported in the same email. This program does not yet have the functionality to send this email.
+In case of an error in the renewal of the certificate, an email informing the error will be written in the tmp folder, in the root of the project. 
+If the problem is due to a domain that could not be renewed, it will be reported in the same email. 
+This program does not yet have the functionality to send this email.
