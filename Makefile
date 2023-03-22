@@ -33,6 +33,11 @@ init-venv: requirements.txt
 build: init-venv check_certbot
 	@echo "OK - set up"
 
+cert_path:
+	@rm .env
+	@cp .env.EXAMPLE .env
+	@sed -i 's/REPLACE_ME/$(path)/g' .env
+
 get_domains_to_renew:
 	@${PYTHON} get_domains_to_renew.py
 
