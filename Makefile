@@ -6,6 +6,7 @@ include .env
 FAILED_DOMAINS_FILE := ${TMP_DIR}/failed-domains.txt
 DOMAINS_TO_RENEW_FILE := ${TMP_DIR}/domains-to-renew.txt
 CERT_FILE := ${CERT_FILE}
+SEND_TO := ${SEND_TO}
 
 # python vars 
 VENV_NAME?=.venv
@@ -43,7 +44,7 @@ get_domains_to_renew:
 
 handle_error:
 	@${PYTHON} validate.py
-	@mailx -s "Failed domains" pablo.cda@gmail.com < ./tmp/failed_domains.txt
+	@mailx -s "Failed domains" ${SEND_TO} < ./tmp/failed_domains.txt
 	@exit 1
 
 certbot-dry-run: get_domains_to_renew
