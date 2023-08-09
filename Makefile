@@ -43,13 +43,13 @@ get_domains_to_renew:
 	@${PYTHON} get_domains_to_renew.py
 
 handle_error:
-	@${PYTHON} validate.py
+	@${PYTHON} dryrun_parser.py
 	@mailx -s "Failed domains" ${SEND_TO} < ./tmp/failed_domains.txt
 	@exit 1
 
 certbot-dry-run: get_domains_to_renew
 	@set -e ; \
-	/usr/bin/certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/log.txt || $(MAKE) -s handle_error
+	/usr/bin/certbot certonly --dry-run --apache --domains $$(cat ${DOMAINS_TO_RENEW_FILE}) > ${TMP_DIR}/dry-run-output.txt || $(MAKE) -s handle_error
 
 certbot-renew: certbot-dry-run
 	@/usr/bin/certbot -q renew
